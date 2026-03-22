@@ -4,7 +4,7 @@ import os
 
 # --- CONFIGURATION ---
 # Replace this with your actual Render URL tomorrow!
-RENDER_URL = "https://talk-and-type.onrender.com/get_text"
+RENDER_URL = "https://talk-and-type.onrender.com"
 ROOM_CODE = "1234"  # Make sure this matches what you type in the app
 POLL_INTERVAL = 2   # Checks for new text every 2 seconds
 # ---------------------
