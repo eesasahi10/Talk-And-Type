@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talk&Type - Realtime Voice to PC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0f172a; --text-color: white; --text-muted: #cbd5e1;
+            --primary-color: #38bdf8; --primary-hover: #0284c7;
+            --section-bg: #1e293b; --box-bg: #0f172a; --box-border: #334155;
+            --nav-bg: rgba(15, 23, 42, 0.95); --card-bg: rgba(30, 41, 59, 0.8);
+            --digit-bg: #0f172a;
+        }
+
+        body.light-mode {
+            --bg-color: #f8fafc; --text-color: #0f172a; --text-muted: #475569;
+            --primary-color: #0ea5e9; --section-bg: #e2e8f0;
+            --box-bg: #ffffff; --box-border: #cbd5e1;
+            --nav-bg: rgba(255, 255, 255, 0.95); --card-bg: #ffffff;
+            --digit-bg: #f1f5f9;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); transition: 0.4s ease; padding-top: 80px; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background-color: var(--nav-bg); position: fixed; width: 100%; top: 0; z-index: 1000; }
+        .logo { font-size: 28px; color: var(--primary-color); font-weight: bold; }
+        .hero { min-height: 90vh; display: flex; justify-content: space-between; align-items: center; padding: 0 10%; }
+        .hero-text { max-width: 45%; }
+        .hero h2 { font-size: 50px; margin-bottom: 20px; }
+        
+        .connection-card {
+            background-color: var(--card-bg); border: 1px solid var(--primary-color);
+            border-radius: px; padding: 30px; width: 45%; max-width: 500px;
+            box-shadow: 0px 15px 40px rgba(56, 189, 248, 0.2); backdrop-filter: blur(10px);
+        }
+
+        .status.pulse { color: #f59e0b; font-size: 14px; font-weight: bold; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        .code-display { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
+        .digit {
+            background-color: var(--digit-bg); color: var(--primary-color);
+            font-size: 32px; font-weight: bold; width: 50px; height: 60px;
+            display: flex; justify-content: center; align-items: center;
+            border-radius: 8px; border: 1px solid var(--box-border);
+        }
+
+        .btn-small { background: transparent; color: var(--text-muted); border: 1px solid var(--box-border); padding: 10px; cursor: pointer; border-radius: 5px; }
+        .typed-text { color: var(--primary-color); border-right: 3px solid var(--primary-color); }
+    </style>
+</head>
+<body class="dark-mode">
+
+    <nav class="navbar">
+        <h1 class="logo">Talk<span style="color:white;">&</span>Type</h1>
+        <div class="nav-actions">
+            <i class="fa-solid fa-moon" id="theme-btn" style="cursor:pointer;"></i>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-text">
+            <h2>Your Voice. Your PC.<br><span class="typed-text" id="typewriter"></span></h2>
+            <p>Instant speech-to-text pairing using a 7-digit secure code.</p>
+        </div>
+        
+        <div class="connection-card">
+            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                <h3><i class="fa-solid fa-desktop"></i> PC Ready</h3>
+            </div>
+            
+            <div class="code-display" id="room-code">
+                <span class="digit">-</span><span class="digit">-</span><span class="digit">-</span>
+                <span class="digit">-</span><span class="digit">-</span><span class="digit">-</span><span class="digit">-</span>
+            </div>
+            
+            <div style="text-align:center;">
+                <button id="refresh-code-btn" class="btn-small"><i class="fa-solid fa-rotate-right"></i> Generate New Code</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        let currentCode = "";
+
+        // 1. Fetch the REAL code from your Python server
+        async function getCode() {
+            try {
+                const response = await fetch('/generate_code');
+                const data = await response.json();
+                currentCode = data.code;
+
+                const digits = document.querySelectorAll('.digit');
+                for(let i=0; i<7; i++) {
+                    digits[i].innerText = currentCode[i];
+                }
+                console.log("Active Session:", currentCode);
+            } catch(e) { console.log("Server not ready."); }
+        }
+
+        // 2. Poll the server for new text from the phone
+        async function checkMailbox() {
+            if(!currentCode) return;
+            try {
+                const response = await fetch(`/get_text?code=${currentCode}`);
+                const data = await response.json();
+                if(data.text) {
+                    document.getElementById('connection-status').innerText = "Received: " + data.text;
+                    document.getElementById('connection-status').style.color = "#38bdf8";
+                }
+            } catch(e) {}
+        }
+
+        // 3. Cousin's Typewriter Effect
+        const words = ["Instant Typing.", "Zero Lag.", "Voice to Keys.", "Wireless Control."];
+        let wIdx = 0, cIdx = 0;
+        function typeEffect() {
+            const target = document.getElementById("typewriter");
+            if (cIdx < words[wIdx].length) {
+                target.textContent += words[wIdx].charAt(cIdx++);
+                setTimeout(typeEffect, 100);
+            } else { setTimeout(eraseEffect, 2000); }
+        }
+        function eraseEffect() {
+            const target = document.getElementById("typewriter");
+            if (cIdx > 0) {
+                target.textContent = words[wIdx].substring(0, --cIdx);
+                setTimeout(eraseEffect, 50);
+            } else { wIdx = (wIdx + 1) % words.length; setTimeout(typeEffect, 500); }
+        }
+
+        // 4. Initialize everything
+        document.getElementById('refresh-code-btn').onclick = getCode;
+        document.getElementById('theme-btn').onclick = () => document.body.classList.toggle('light-mode');
+        
+        window.onload = () => {
+            getCode();
+            typeEffect();
+            setInterval(checkMailbox, 1000); // Check for voice every second
+        };
+    </script>
+</body>
+</html>
