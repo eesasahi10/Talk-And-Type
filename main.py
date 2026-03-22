@@ -10,7 +10,7 @@ mailboxes = {}
 @app.route('/')
 def index():
     # This serves your Talk&Type.html file from the templates folder
-    return render_template('Talk&Type.html')
+    return render_template('index.html')
 
 # DOOR 1: Generates the 7-digit code for the website
 @app.route('/generate_code')
