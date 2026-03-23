@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, jsonify
 import random
-import pyautogui
 
 # Make sure your app is set up like this:
 app = Flask(__name__, static_folder='static')
