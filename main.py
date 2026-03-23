@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, jsonify
 import random
 import pyautogui
 
-app = Flask(__name__)
+# Make sure your app is set up like this:
+app = Flask(__name__, static_folder='static')
 
 # This dictionary acts as our 'Mailbox' system
 # It stores { "7-digit-code": "The spoken text" }
