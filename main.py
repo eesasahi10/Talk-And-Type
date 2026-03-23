@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import random
+import pyautogui
 
 app = Flask(__name__)
 
@@ -54,6 +55,8 @@ def get_text():
     code = request.args.get('code')
     if code in mailboxes and mailboxes[code] is not None:
         message = mailboxes[code]
+        # Find where you save the message, then add this:
+    pyautogui.write(message, interval=0.05)
         mailboxes[code] = None  # Empty the mailbox after picking it up
         return jsonify({"text": message}), 200
     
