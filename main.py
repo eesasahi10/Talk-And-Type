@@ -56,7 +56,7 @@ def get_text():
     if code in mailboxes and mailboxes[code] is not None:
         message = mailboxes[code]
         # Find where you save the message, then add this:
-    pyautogui.write(message, interval=0.05)
+        pyautogui.write(message, interval=0.05)
         mailboxes[code] = None  # Empty the mailbox after picking it up
         return jsonify({"text": message}), 200
     
