@@ -27,24 +27,42 @@
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
     body { background-color: var(--bg-color); color: var(--text-color); transition: 0.4s ease; padding-top: 80px; }
 
-    .navbar {
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: flex-start !important;
-        align-items: center !important;
-        gap: 40px !important;
-        padding: 10px 50px !important;
-        width: 100% !important;
-        background-color: #0f172a;
+.navbar {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    gap: 40px !important;
+    padding: 10px 50px !important;
+    width: 100% !important;
+    background-color: #0f172a;
+    border-bottom: 1px solid #1e293b;
+    /* This makes the navbar font modern like the home page */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    .nav-pills {
-        display: flex !important;
-        padding-left: 0 !important;
-        margin-bottom: 0 !important;
-    } /* FIXED: Added missing brace here */
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #38bdf8;
+    margin: 0;
+    text-decoration: none;
+}
 
-    .logo { font-size: 28px; color: var(--primary-color); font-weight: bold; }
+.nav-pills {
+    display: flex !important;
+    list-style: none;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-link {
+    color: #38bdf8 !important;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+}
     .hero { min-height: 90vh; display: flex; justify-content: space-between; align-items: center; padding: 0 10%; }
     .hero-text { max-width: 45%; }
     .hero h2 { font-size: 50px; margin-bottom: 20px; }
@@ -93,9 +111,6 @@
   	</li>
   	<li class="nav-item">
     		<a class="nav-link" href="https://eesasahi10.github.io/Talk-and-Type-Instructions/">Instructions</a>
-  	</li>
-  	<li class="nav-item">
-    		<a class="nav-link" href="#">Link</a>
   	</li>
 	</ul>
     </nav>
@@ -164,32 +179,72 @@
             } catch(e) {}
         }
 
-        // 3. Cousin's Typewriter Effect
+<script>
+        let currentCode = "";
+
+        // 1. Fetch Code from Server
+        async function getCode() {
+            try {
+                const response = await fetch('/generate_code');
+                const data = await response.json();
+                currentCode = data.code;
+
+                const digits = document.querySelectorAll('.digit');
+                for(let i=0; i<7; i++) {
+                    digits[i].innerText = currentCode[i] || "-";
+                }
+            } catch(e) { console.log("Server not ready."); }
+        }
+
+        // 2. Check for Voice Text
+        async function checkMailbox() {
+            if(!currentCode) return;
+            try {
+                const response = await fetch(`/get_text?code=${currentCode}`);
+                const data = await response.json();
+                if(data.text) {
+                    console.log("Received: " + data.text);
+                    // Add an element with id 'connection-status' if you want to show this on screen
+                }
+            } catch(e) {}
+        }
+
+        // 3. Typewriter Effect
         const words = ["Instant Typing.", "Zero Lag.", "Voice to Keys.", "Wireless Control."];
         let wIdx = 0, cIdx = 0;
+        
         function typeEffect() {
             const target = document.getElementById("typewriter");
+            if (!target) return;
             if (cIdx < words[wIdx].length) {
                 target.textContent += words[wIdx].charAt(cIdx++);
                 setTimeout(typeEffect, 100);
             } else { setTimeout(eraseEffect, 2000); }
         }
+
         function eraseEffect() {
             const target = document.getElementById("typewriter");
             if (cIdx > 0) {
                 target.textContent = words[wIdx].substring(0, --cIdx);
                 setTimeout(eraseEffect, 50);
-            } else { wIdx = (wIdx + 1) % words.length; setTimeout(typeEffect, 500); }
+            } else { 
+                wIdx = (wIdx + 1) % words.length; 
+                setTimeout(typeEffect, 500); 
+            }
         }
 
-        // 4. Initialize everything
-        document.getElementById('refresh-code-btn').onclick = getCode;
-        document.getElementById('theme-btn').onclick = () => document.body.classList.toggle('light-mode');
-        
+        // 4. Start Everything
         window.onload = () => {
             getCode();
             typeEffect();
-            setInterval(checkMailbox, 1000); // Check for voice every second
+            setInterval(checkMailbox, 1000); 
+
+            // Setup buttons safely
+            const refreshBtn = document.getElementById('refresh-code-btn');
+            if(refreshBtn) refreshBtn.onclick = getCode;
+
+            const themeBtn = document.getElementById('theme-btn');
+            if(themeBtn) themeBtn.onclick = () => document.body.classList.toggle('light-mode');
         };
     </script>
 </body>
