@@ -26,7 +26,23 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-color); transition: 0.4s ease; padding-top: 80px; }
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background-color: var(--nav-bg); position: fixed; width: 100%; top: 0; z-index: 1000; }
+/* This forces the navbar to behave regardless of other settings */
+	.navbar {
+    		display: flex !important;
+    		flex-direction: row !important;
+    		justify-content: flex-start !important;
+    		align-items: center !important;
+    		gap: 40px !important;
+    		padding: 10px 50px !important;
+    		width: 100% !important;
+    		background-color: #0f172a; /* Ensuring your deep blue is there */
+		}
+
+		/* Make sure the list doesn't have extra padding pushing it away */
+		.nav-pills {
+    			display: flex !important;
+    			padding-left: 0 !important;
+    			margin-bottom: 0 !important;
         .logo { font-size: 28px; color: var(--primary-color); font-weight: bold; }
         .hero { min-height: 90vh; display: flex; justify-content: space-between; align-items: center; padding: 0 10%; }
         .hero-text { max-width: 45%; }
@@ -57,9 +73,17 @@
 
     <nav class="navbar">
         <h1 class="logo">Talk<span style="color:white;">&</span>Type</h1>
-        <div class="nav-actions">
-            <i class="fa-solid fa-moon" id="theme-btn" style="cursor:pointer;"></i>
-        </div>
+	<ul class="nav nav-pills">
+  	<li class="nav-item">
+    		<a class="nav-link" aria-current="page" href="Talk&Type.html">Home</a>
+  	</li>
+  	<li class="nav-item">
+    		<a class="nav-link" href="Instructions.html">Instructions</a>
+  	</li>
+  	<li class="nav-item">
+    		<a class="nav-link" href="#">Link</a>
+  	</li>
+	</ul>
     </nav>
 
     <section class="hero">
