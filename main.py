@@ -43,8 +43,18 @@ def send_text():
     speech = data.get('speech')
     
     if code in mailboxes:
-        mailboxes[code] = speech
-        print(f"Room {code} received text: {speech}")
+        # --- COMMAND LOGIC START ---
+        # 1. Handle Punctuation
+        processed_text = speech.lower()
+        processed_text = processed_text.replace("full stop", ".")
+        processed_text = processed_text.replace("comma", ",")
+        processed_text = processed_text.replace("question mark", "?")
+        processed_text = processed_text.replace("exclimination mark", "!")
+        processed_text = processed_text.replace("slash", "/")
+
+        mailboxes[code] = processed_text
+
+        print(f"Room {code} received: {mailboxes[code]}")
         return jsonify({"status": "success"}), 200
     
     return jsonify({"status": "error", "message": "Invalid Room Code"}), 404
