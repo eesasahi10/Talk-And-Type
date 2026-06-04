@@ -37,11 +37,15 @@ def send_text():
     
     if code in mailboxes:
         processed_text = speech.lower()
-        processed_text = processed_text.replace("full stop", ".")
+        processed_text = processed_text.replace("full stop","period", ".")
         processed_text = processed_text.replace("comma", ",")
         processed_text = processed_text.replace("question mark", "?")
-        processed_text = processed_text.replace("exclamation mark", "!") # Fixed typo
+        processed_text = processed_text.replace("exclamation mark", "!")
         processed_text = processed_text.replace("slash", "/")
+        processed_text = processed_text.replace("space", " ")
+        processed_text = processed_text.replace("open bracket", "(")
+        processed_text = processed_text.replace("close bracket", ")")
+        processed_text = processed_text.replace("new line", "\n")
 
         mailboxes[code] = processed_text
         print(f"Room {code} received text: {mailboxes[code]}")
