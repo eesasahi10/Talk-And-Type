@@ -37,7 +37,7 @@ def send_text():
     
     if code in mailboxes:
         processed_text = speech.lower()
-        processed_text = processed_text.replace("full stop","period", ".")
+        processed_text = processed_text.replace("full stop" or "period", ".")
         processed_text = processed_text.replace("comma", ",")
         processed_text = processed_text.replace("question mark", "?")
         processed_text = processed_text.replace("exclamation mark", "!")
