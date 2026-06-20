@@ -27,6 +27,14 @@
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
     body { background-color: var(--bg-color); color: var(--text-color); transition: 0.4s ease; padding-top: 80px; }
 
+    @keyframes myanimationfade {
+        0%   {opacity: 0; }
+        50%  {opacity: 0.5; }
+        100% {opacity: 1; }
+
+    .animation {
+        animation: myanimationfade 1s ease-in-out forwards;
+    }
     .navbar {
         display: flex !important;
         flex-direction: row !important;
@@ -92,6 +100,7 @@
         </ul>
     </nav>
 
+    <div class="animation">
     <section class="hero">
         <div class="hero-text">
             <h2>Your Voice. Your PC.<br><span class="typed-text" id="typewriter"></span></h2>
@@ -115,6 +124,7 @@
             </div>
             <div id="connection-status" style="text-align: center; margin-top: 15px; font-size: 14px; color: var(--text-muted);"></div>
         </div>
+    </div>
     </section>
 
     <script>
