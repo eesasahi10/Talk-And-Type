@@ -46,7 +46,8 @@ def send_text():
         processed_text = processed_text.replace("open bracket", "(")
         processed_text = processed_text.replace("close bracket", ")")
         processed_text = processed_text.replace("new line", "\n")
-
+        processed_text = processed_text.replace("plus" or "add", "+")
+        processed_text = processed_text.replace("minus" or "subtract" or "dash" or "hyphen", "-")
         mailboxes[code] = processed_text
         print(f"Room {code} received text: {mailboxes[code]}")
         return jsonify({"status": "success"}), 200
