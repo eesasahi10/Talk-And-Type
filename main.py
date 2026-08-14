@@ -24,6 +24,10 @@ def generate_code():
 def connect():
     data = request.json
     user_code = data.get('code')
+
+    print("PHONE/TYPER SENT CODE:", repr(user_code))
+    print("REGISTERED MAILBOXES:", list(mailboxes.keys()))
+
     if user_code in mailboxes:
         return {"status": "success", "message": "Linked!"}, 200
     else:
