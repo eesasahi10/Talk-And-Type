@@ -23,22 +23,21 @@ def generate_code():
 @app.route('/connect', methods=['POST'])
 def connect():
     data = request.json
+    user_code = data.get('code')
 
-    print("========== CONNECT DEBUG ==========")
+    print("=== CONNECT DEBUG ===")
     print("Received data:", data)
-    print("Received code:", repr(data.get('code')))
-    print("Current mailboxes:", list(mailboxes.keys()))
-    print("===================================")
-
-    user_code = str(data.get('code', '')).strip()
+    print("Received code:", repr(user_code))
+    print("Code type:", type(user_code))
+    print("Current code:", repr(current_code))
+    print("Mailbox keys:", list(mailboxes.keys()))
+    print("Code exists:", user_code in mailboxes)
+    print("====================")
 
     if user_code in mailboxes:
-        print(">>> CODE FOUND <<<")
         return {"status": "success", "message": "Linked!"}, 200
-
-    print(">>> CODE NOT FOUND <<<")
-
-    return {"status": "error", "message": "Invalid Code"}, 400
+    else:
+        return {"status": "error", "message": "Invalid Code"}, 400
 
 @app.route('/send_text', methods=['POST'])
 def send_text():
