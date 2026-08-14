@@ -24,7 +24,7 @@ def generate_code():
 def connect():
     data = request.json
     user_code = data.get('code')
-    if user_code == current_code:
+    if user_code in mailboxes:
         return {"status": "success", "message": "Linked!"}, 200
     else:
         return {"status": "error", "message": "Invalid Code"}, 400
