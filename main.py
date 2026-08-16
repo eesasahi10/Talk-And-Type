@@ -25,19 +25,24 @@ def connect():
     data = request.json
     user_code = data.get('code')
 
-    print("=== CONNECT DEBUG ===")
+    print("========== CONNECT ==========")
     print("Received data:", data)
     print("Received code:", repr(user_code))
-    print("Code type:", type(user_code))
-    print("Current code:", repr(current_code))
+    print("Received type:", type(user_code))
     print("Mailbox keys:", list(mailboxes.keys()))
     print("Code exists:", user_code in mailboxes)
-    print("====================")
+    print("=============================")
 
     if user_code in mailboxes:
-        return {"status": "success", "message": "Linked!"}, 200
-    else:
-        return {"status": "error", "message": "Invalid Code"}, 400
+        return jsonify({
+            "status": "success",
+            "message": "Linked!"
+        }), 200
+
+    return jsonify({
+        "status": "error",
+        "message": "Invalid Code"
+    }), 400
 
 @app.route('/send_text', methods=['POST'])
 def send_text():
