@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, jsonify
 import random
+from flask_cors import CORS
 
 app = Flask(__name__, static_folder='static')
+CORS(app)
 
 # Stores { "7-digit-code": "The spoken text" }
 mailboxes = {}
