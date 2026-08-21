@@ -72,7 +72,6 @@ def send_text():
         processed_text = processed_text.replace("hyphen", "-")
         processed_text = processed_text.replace("open curly bracket", "{")
         processed_text = processed_text.replace("close curly bracket", "}")
-        processed_text = processed_text.replace("quotation mark", """)
         processed_text = processed_text.replace("star", "*")
         processed_text = processed_text.replace("hash", "#")
         processed_text = processed_text.replace("at the rate of", "@")
