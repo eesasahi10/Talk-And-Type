@@ -54,7 +54,8 @@ def send_text():
     
     if code in mailboxes:
         processed_text = speech.lower()
-        processed_text = processed_text.replace("full stop" or "period", ".")
+        processed_text = processed_text.replace("full stop", ".")
+        processed_text = processed_text.replace("period", ".")
         processed_text = processed_text.replace("comma", ",")
         processed_text = processed_text.replace("question mark", "?")
         processed_text = processed_text.replace("exclamation mark", "!")
@@ -63,8 +64,19 @@ def send_text():
         processed_text = processed_text.replace("open bracket", "(")
         processed_text = processed_text.replace("close bracket", ")")
         processed_text = processed_text.replace("new line", "\n")
-        processed_text = processed_text.replace("plus" or "add", "+")
-        processed_text = processed_text.replace("minus" or "subtract" or "dash" or "hyphen", "-")
+        processed_text = processed_text.replace("plus", "+")
+        processed_text = processed_text.replace("add", "+")
+        processed_text = processed_text.replace("minus", "-")
+        processed_text = processed_text.replace("subtract", "-")
+        processed_text = processed_text.replace("dash", "-")
+        processed_text = processed_text.replace("hyphen", "-")
+        processed_text = processed_text.replace("open curly bracket", "{")
+        processed_text = processed_text.replace("close curly bracket", "}")
+        processed_text = processed_text.replace("quotation mark", """)
+        processed_text = processed_text.replace("star", "*")
+        processed_text = processed_text.replace("hash", "#")
+        processed_text = processed_text.replace("at the rate of", "@")
+        processed_text = processed_text.replace("percentage", "%")
         mailboxes[code] = processed_text
         print(f"Room {code} received text: {mailboxes[code]}")
         return jsonify({"status": "success"}), 200
