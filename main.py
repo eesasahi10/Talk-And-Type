@@ -77,6 +77,7 @@ def send_text():
         processed_text = processed_text.replace("hash", "#")
         processed_text = processed_text.replace("at the rate of", "@")
         processed_text = processed_text.replace("percentage", "%")
+        processed_text = processed_text.replace("colon", ":")
         mailboxes[code] = processed_text
         print(f"Room {code} received text: {mailboxes[code]}")
         return jsonify({"status": "success"}), 200
