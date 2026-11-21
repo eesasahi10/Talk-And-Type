@@ -1,4 +1,4 @@
-
+import os
 from flask import Flask, render_template, request, jsonify
 import random
 from flask_cors import CORS
@@ -102,4 +102,4 @@ def get_text():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=10000)
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
